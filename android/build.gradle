@@ -1,39 +1,18 @@
-//allprojects {
-//    repositories {
-//        google()
-//        mavenCentral()
-//    }
-//}
-//
-//rootProject.buildDir = "../build"
-//subprojects {
-//    project.buildDir = "${rootProject.buildDir}/${project.name}"
-//}
-//subprojects {
-//    project.evaluationDependsOn(":app")
-//}
-//
-//tasks.register("clean", Delete) {
-//    delete rootProject.buildDir
-//}
-android {
-    compileSdkVersion 33
-
-    defaultConfig {
-        applicationId "com.example.lab141"
-        minSdkVersion 21
-        targetSdkVersion 33
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
-    }
-
-    buildTypes {
-        release {
-            signingConfig signingConfigs.debug
-        }
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
     }
 }
 
-dependencies {
-    implementation 'com.flutter:flutter_embedding:2.0.0'  // Make sure the version is compatible
+rootProject.buildDir = "../build"
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
 }

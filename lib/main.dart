@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io';
+import 'dart:io'; // Import this library for the File class
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/services.dart';
@@ -14,33 +14,37 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Native Camera App',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: HomePage(),
+      home: CameraPage(),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
+class CameraPage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _CameraPageState createState() => _CameraPageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  String _nativeMessage = 'Hi, mom!';
+class _CameraPageState extends State<CameraPage> {
+  String _nativeMessage = 'Hi, mom';
   XFile? _image;
 
   final ImagePicker _picker = ImagePicker();
-  static const platform = MethodChannel('com.example.lab141/native');
+  static const MethodChannel _channel =
+  MethodChannel('com.example.native_camera_app/native');
 
-  Future<String> getNativeMessage() async {
-    try {
-      final String message = await platform.invokeMethod('getStaticString');
-      _showDialog(message); // Переміщуємо виклик діалогового вікна перед поверненням
-      return message;
-    } on PlatformException catch (e) {
-      return "Failed to get message: '${e.message}'.";
-    }
-  }
-
+  // Future<void> _getNativeMessage() async {
+  //   String message;
+  //   try {
+  //     message = await _channel.invokeMethod('getStaticString');
+  //   } on PlatformException catch (e) {
+  //     message = 'Failed to get message: ${e.message}';
+  //   }
+  //
+  //   setState(() {
+  //     _nativeMessage = message;
+  //   });
+  // }
+  String Message = 'Hi, mom';
   Future<void> _showDialog(String message) async {
     return showDialog<void>(
       context: context,
@@ -65,7 +69,7 @@ class _HomePageState extends State<HomePage> {
             TextButton(
               child: const Text('OK'),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(); // Закриває діалог
               },
             ),
           ],
@@ -73,20 +77,17 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
-
   Future<void> _takePhoto() async {
     final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
     setState(() {
       _image = photo;
     });
   }
-
   Future<void> _delPhoto() async {
     setState(() {
       _image = null;
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,9 +95,8 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          //Text('Native Message: $_nativeMessage'),
           ElevatedButton(
-            onPressed: getNativeMessage, // Оновлено на виклик getNativeMessage
+            onPressed: () => _showDialog(Message),
             child: const Text('Show String'),
           ),
           const SizedBox(height: 20),
